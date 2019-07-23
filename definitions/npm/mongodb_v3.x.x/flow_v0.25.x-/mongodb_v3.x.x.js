@@ -2,47 +2,47 @@ import { EventEmitter } from "events";
 
 // @flow
 
-declare export type mongodb$ReadPreference =
+export type mongodb$ReadPreference =
   | "PRIMARY"
   | "PRIMARY_PREFERRED"
   | "SECONDARY"
   | "SECONDARY_PREFERRED"
   | "NEAREST";
 
-declare export type mongodb$ReadConcernLevel =
+export type mongodb$ReadConcernLevel =
   | 'local'
   | 'available'
   | 'majority'
   | 'linearizable'
   | 'snapshot';
 
-declare export type mongodb$ProfilingLevel =
+export type mongodb$ProfilingLevel =
   | 'off'
   | 'slow_only'
   | 'all';
 
-declare export type mongodb$CursorFlag =
+export type mongodb$CursorFlag =
   | "tailable"
   | "oplogReplay"
   | "noCursorTimeout"
-  | "awaitData" 
+  | "awaitData"
   | "partial";
 
-declare export type mongodb$BulkWriteResult = void;
+export type mongodb$BulkWriteResult = void;
 
-declare export type mongodb$ReadConcern = {
+export type mongodb$ReadConcern = {
   level?: mongodb$ReadConcernLevel,
 };
 
-declare export type mongodb$WriteConcern = {
+export type mongodb$WriteConcern = {
   w?: number | "majority",
   j?: boolean,
   wtimeout?: number,
 };
 
-declare export type mongodb$ErrorCallback = (err: ?MongoError) => void;
+export type mongodb$ErrorCallback = (err: ?MongoError) => void;
 
-declare export type mongodb$AggregateOptions = {
+export type mongodb$AggregateOptions = {
   readPreference?: mongodb$ReadPreference,
   cursor?: Object,
   explain?: boolean,
@@ -59,7 +59,7 @@ declare export type mongodb$AggregateOptions = {
   session?: ClientSession,
 };
 
-declare type mongodb$BulkWriteOpResult = {
+export type mongodb$BulkWriteOpResult = {
   insertedCount: number,
   matchedCount: number,
   modifiedCount: number,
@@ -69,7 +69,7 @@ declare type mongodb$BulkWriteOpResult = {
   result: Object,
 }
 
-declare export type mongodb$SocketOptions = {
+export type mongodb$SocketOptions = {
   socketOptions?: {
     noDelay?: boolean,
     keepAlive?: boolean,
@@ -82,12 +82,12 @@ declare export type mongodb$SocketOptions = {
 declare type mongodb$AggregationCallback = (error: MongoError, cursor: AggregationCursor) => void;
 
 
-declare export type mongodb$ResultCallback = (error: ?MongoError, result: {}) => void;
-declare export type mongodb$AggResultCallback = (error: ?MongoError, result: {} | null) => void;
+export type mongodb$ResultCallback = (error: ?MongoError, result: {}) => void;
+export type mongodb$AggResultCallback = (error: ?MongoError, result: {} | null) => void;
 
-declare export type mongodb$collectionResultCallback = (error: ?MongoError, collection: Collection);
+export type mongodb$collectionResultCallback = (error: ?MongoError, collection: Collection) => void;
 
-declare export type mongodb$IndexCreateOptions = {
+export type mongodb$IndexCreateOptions = {
   unique?: boolean,
   sparse?: boolean,
   background?: boolean,
@@ -99,22 +99,22 @@ declare export type mongodb$IndexCreateOptions = {
   name?: number,
 };
 
-declare export type mongodb$WriteOptions = {
+export type mongodb$WriteOptions = {
   w?: number | string,
   wtimeout?: number,
   j?: boolean,
   session?: ClientSession,
 };
 
-declare export type mongodb$IteratorCallback = (
+export type mongodb$IteratorCallback = (
   doc: Object
 ) => void;
 
-declare export type mongodb$EndCallback = (
+export type mongodb$EndCallback = (
   err: ?MongoError
 ) => void;
 
-declare export type mongodb$DbOptions = {
+export type mongodb$DbOptions = {
   authSource?: string,
   w?: number | string,
   wtimeout?: number,
@@ -173,7 +173,6 @@ export type mongodb$TransactionOptions = {
 };
 
 declare module "mongodb" {
-  declare export default type Test = "";
   declare export class Db {
     constructor(databaseName: string, topology: Topology, options?: mongodb$DbOptions): Db;
     serverConfig: Server | ReplSet | Mongos;
@@ -182,10 +181,10 @@ declare module "mongodb" {
     options: mongodb$DbOptions;
     native_parser: boolean;
     slaveOk: boolean;
-    writeConcern: mongodb$WriteConcern,
-    topology: Topology,
+    writeConcern: mongodb$WriteConcern;
+    topology: Topology;
 
-    addUser(username: string, password: string, options: mongodb$AddUserOptions, callback: (err: any, data: any) => void);
+    addUser(username: string, password: string, options: mongodb$AddUserOptions, callback: (err: any, data: any) => void): void;
     addUser(username: string, password: string, options: mongodb$AddUserOptions): Promise<any>;
 
     admin(): Admin;
@@ -201,7 +200,7 @@ declare module "mongodb" {
     ): Collection;
 
     collections(options?: { session: ClientSession }): Promise<Array<Collection>>;
-    collections(options?: { session: ClientSession }, callback: (err: any, data: Array<Collection>) => void);
+    collections(options?: { session: ClientSession }, callback: (err: any, data: Array<Collection>) => void): void;
 
     command(
       command: any,
@@ -211,13 +210,13 @@ declare module "mongodb" {
       command: any,
       options?: { readPreference?: mongodb$ReadPreference, session: ClientSession },
       callback: (err: any, data: any) => void
-    );
+    ): void;
 
     createCollection(
       name: string,
       options?: mongodb$CreateCollectionOptions,
       callback: mongodb$collectionResultCallback,
-    );
+    ): void;
     createCollection(
       name: string,
       options: mongodb$CreateCollectionOptions,
@@ -228,7 +227,7 @@ declare module "mongodb" {
       fieldOrSpec: any,
       options?: mongodb$CreateIndexOptions,
       callback: (err: any, idx: any) => void,
-    );
+    ): void;
     createIndex(
       name: string,
       fieldOrSpec: any,
@@ -239,46 +238,51 @@ declare module "mongodb" {
       name: string,
       options?: { session?: ClientSession },
       callback: (err: any, ans: any) => void,
-    );
+    ): void;
     dropCollection(
       name: string,
       options?: { session?: ClientSession },
     ): Promise<void>;
 
-    dropDatabase(
-      options?: { session?: ClientSession },
-      callback: (err: any, ans: any) => void,
-    );
-    dropDatabase(
-      options?: { session?: ClientSession },stream(options?: {
-      transform?: any => any,
-    }): Cursor;
-    ): Promise<void>;
+    // TODO
+    // XXX XXX
+    // XXX XXX
+    // dropDatabase(
+    //   options?: { session?: ClientSession },
+    //   callback: (err: any, ans: any) => void,
+    // ): void;
+    // dropDatabase(
+    //   options?: { session?: ClientSession },
+    //   stream
+    //   (options?: {
+    //   transform?: any => any,
+    // }): Cursor;
+    // ): Promise<void>;
 
-    ensureIndex(
-      name: string,
-      fieldOrSpec: string | {},
-      options?: mongodb$IndexCreateOptions &stream(options?: {
-      transform?: any => any,
-    }): Cursor;
-      callback: (err: any, ans: any) => voidstream(options?: {
-      transform?: any => any,
-    }): Cursor;
-    );
-    ensureIndex(
-      name: string,
-      fieldOrSpec: string | {},
-      options?: mongodb$IndexCreateOptions &stream(options?: {
-      transform?: any => any,
-    }): Cursor;
-    ): Promise<void>;
+    // ensureIndex(
+    //   name: string,
+    //   fieldOrSpec: string | {},
+    //   options?: mongodb$IndexCreateOptions &stream(options?: {
+    //   transform?: any => any,
+    // }): Cursor;
+    //   callback: (err: any, ans: any) => voidstream(options?: {
+    //   transform?: any => any,
+    // }): Cursor;
+    // );
+    // ensureIndex(
+    //   name: string,
+    //   fieldOrSpec: string | {},
+    //   options?: mongodb$IndexCreateOptions &stream(options?: {
+    //   transform?: any => any,
+    // }): Cursor;
+    // ): Promise<void>;
 
     eval(
       code: string,
       parameters: Array<{}> | {},
       options: { nolock: boolean, session: ClientSession },
       callback: (err: any, ans: any) => void,
-    );
+    ): void;
     eval(
       code: string,
       parameters: Array<{}> | {},
@@ -289,7 +293,7 @@ declare module "mongodb" {
       command: {},
       options?: { readPreference?: mongodb$ReadPreference, session?: ClientSession },
       callback: (err: any, ans: any) => void,
-    );
+    ): void;
     executeDbAdminCommand(
       command: {},
       options?: { readPreference?: mongodb$ReadPreference, session?: ClientSession },
@@ -303,7 +307,7 @@ declare module "mongodb" {
         session?: ClientSession,
       },
       callback: (err: any, ans: any) => void,
-    );
+    ): void;
     indexInformation(
       name: string,
       options?: {
@@ -326,7 +330,7 @@ declare module "mongodb" {
     profilingLevel(
       options?: { session: ClientSession },
       callback: (err: any, ans: any) => void,
-    );
+    ): void;
     profilingLevel(
       options?: { session: ClientSession },
     ): Promise<any>;
@@ -335,7 +339,7 @@ declare module "mongodb" {
       username: string,
       options?: mongodb$WriteConcert & { session?: ClientSession },
       callback: (err: any, ans: any) => void,
-    );
+    ): void;
     removeUser(
       username: string,
       options?: mongodb$WriteConcert & { session?: ClientSession },
@@ -349,7 +353,7 @@ declare module "mongodb" {
         session?: ClientSession,
       },
       callback: (err: any, ans: any) => void,
-    );
+    ): void;
     renameCollection(
       fromCollection: string,
       toCollection: string,
@@ -363,7 +367,7 @@ declare module "mongodb" {
       level: mongodb$ProfilingLevel,
       options?: { session?: ClientSession },
       callback: (err: any, ans: any) => void,
-    );
+    ): void;
     setProfilingLevel(
       level: mongodb$ProfilingLevel,
       options?: { session?: ClientSession  },
@@ -375,7 +379,7 @@ declare module "mongodb" {
         session?: ClientSession ,
       },
       callback: (err: any, ans: any) => void,
-    );
+    ): void;
     stats(
       options?: {
         scale?: number,
@@ -383,7 +387,7 @@ declare module "mongodb" {
       },
     ): Promise<any>;
 
-    unref();
+    unref(): void;
 
     watch(
       pipeline?: Array<{}>,
@@ -392,7 +396,7 @@ declare module "mongodb" {
         resumeAfter?: {},
         maxAwaitTimeMS?: number,
         batchSize?: number,
-        collaction?: {},
+        collaction?: {}, // TODO ?!?!?!?
         readPreference?: mongodb$ReadPreference,
         startAtClusterTime?: Timestamp,
         session?: ClientSession ,
@@ -403,7 +407,7 @@ declare module "mongodb" {
   }
 
   declare export class Binary {
-    constructor(buffer: Buffer, subType: number);
+    constructor(buffer: Buffer, subType: number): Binary; // TODO is this actually a constructor?!??!
     static SUBTYPE_BYTE_ARRAY: number;
     static SUBTYPE_DEFAULT: number;
     static SUBTYPE_FUNCTION: number;
@@ -413,7 +417,7 @@ declare module "mongodb" {
     static SUBTYPE_UUID_OLD: number;
 
     length(): number;
-    put(byte_value: string);
+    put(byte_value: string): void;
     read(position: number, length: number): Buffer;
     value(): string;
     write(string: Buffer | string, offset: number): null;
@@ -428,7 +432,7 @@ declare module "mongodb" {
       writeConcern: mongodb$WriteConcern,
       options: {},
       callback: (err: any, result: any) => void,
-    );
+    ): void;
     finalOptionsHandler(
       config: {
         options: Object,
@@ -436,22 +440,22 @@ declare module "mongodb" {
         resultHandler: any,
       },
       callback: (...args: Array<any>) => void,
-    );
-    find(selector: {});
+    ): void;
+    find(selector: {}): any;
     handleWriteError(
       callback: (...args: Array<any>) => void,
       writeResult: mongodb$BulkWriteResult,
       self: UnorderedBulkOperation | OrderedBulkOperation,
-    );
+    ): void;
     insert(doc: {}): OrderedBulkOperation | UnorderedBulkOperation;
     raw(op: Object): OrderedBulkOperation | UnorderedBulkOperation;
   }
 
-  class BulkWriteError extends MongoError {
+  declare export class BulkWriteError extends MongoError {
     constructor(message: Error | string | Object);
   }
 
-  class ChangeStream extends stream$Readable {
+  declare export class ChangeStream extends stream$Readable {
     constructor(
       changeDomain: MongoClient | Db | Collection,
       pipeline: Array<Object>,
@@ -463,22 +467,22 @@ declare module "mongodb" {
         collation?: Object,
         readPreference?: mongodb$ReadPreference,
       }
-    )
+    );
 
-    close(callback: mongodb$ResultCallback);
-    close(): Promise<Object | null>;
+    close(callback: mongodb$ResultCallback): void;
+    close(): Promise<any>;
 
-    hasNext(callback: (err: MongoError, ans?: boolean) => void);
+    hasNext(callback: (err: MongoError, ans?: boolean) => void): void;
     hasNext(): Promise<boolean>;
 
     isClosed(): boolean;
 
-    next(callback: mongodb$ResultCallback);
+    next(callback: mongodb$ResultCallback): void;
     next(): Promise<Object | null>;
 
-    pause();
-    resume();
-    
+    pause(): void;
+    resume(): void;
+
     stream(options?: { transform?: (Object) => Object }): Cursor;
   }
 
@@ -502,7 +506,7 @@ declare module "mongodb" {
     startTransaction(options: mongodb$TransactionOptions);
 
     withTransaction(
-      fn: (session: ClientSession) => Promise<Object>, 
+      fn: (session: ClientSession) => Promise<Object>,
       options: mongodb$TransactionOptions,
     )
   }
@@ -516,7 +520,7 @@ declare module "mongodb" {
 
   declare export class MongoClient {
     constructor(
-      url: string, 
+      url: string,
       options?: writeConcern & {
         poolSize?: number,
         ssl?: boolean,
@@ -583,16 +587,16 @@ declare module "mongodb" {
     connect(): Promise<MongoClient>;
 
     db(
-      dbName?: string, 
+      dbName?: string,
       options?: {
         noListener?: boolean,
         returnNonCachedInstance?: boolean,
       }
     ): Db;
 
-    isConnected(options?: { 
+    isConnected(options?: {
       noListener?: boolean,
-      returnNonCachedInstance?: boolean, 
+      returnNonCachedInstance?: boolean,
     }): boolean;
 
     startSession(options?: SessionOptions): ClientSession;
@@ -625,7 +629,7 @@ declare module "mongodb" {
     writeConcern: mongodb$WriteConcern,
     readConcern: mongodb$ReadConcern
     hint: Object,
-    
+
     aggregate(
       pipeline?: Array<Object>,
       options?: mongodb$AggregateOptions,
@@ -734,7 +738,7 @@ declare module "mongodb" {
         limit?: number,
         maxTimeMS?: number,
         hint?: string,
-        readPreference?: mongodb$ReadPreference, 
+        readPreference?: mongodb$ReadPreference,
       },
       cb: (err: ?MongoError, count: number) => void,
     );
@@ -745,7 +749,7 @@ declare module "mongodb" {
         limit?: number,
         maxTimeMS?: number,
         hint?: string,
-        readPreference?: mongodb$ReadPreference, 
+        readPreference?: mongodb$ReadPreference,
       }
     ): Promise<Object>;
 
@@ -770,7 +774,7 @@ declare module "mongodb" {
     project(value: Object): Cursor;
     returnKey(retKey: boolean): Cursor;
     setCursorOption(
-      field: "numberOfRetries" | "tailableRetryInterval", 
+      field: "numberOfRetries" | "tailableRetryInterval",
       value: string
     ): Cursor;
     setReadPreference(rp: mongodb$ReadPreference): Cursor;
@@ -914,7 +918,7 @@ declare module "mongodb" {
     abort(cb: mongodb$ErrorCallback);
     abort(): Promise<void>;
     end(chunk: Buffer, encoding: string, cb: mongodb$ErrorCallback);
-  }  
+  }
 
   declare export class Int32 {
     constructor(value: number);

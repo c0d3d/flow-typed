@@ -1,10 +1,9 @@
 /* @flow */
-import mongodb from "mongodb";
+import * as mongodb from 'mongodb';
 
 // Admin
 
-const admin = mongodb.Admin();
+const admin = new mongodb.Admin();
 // $ExpectError
 admin.addUser("", "", "")
-// $ExpectError
 admin.addUser("", "", function() {})
